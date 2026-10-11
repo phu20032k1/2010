@@ -3,48 +3,77 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="format-detection" content="telephone=no" />
   <meta name="theme-color" content="#f7efec" />
   <meta name="color-scheme" content="light" />
-  <meta name="description" content="Một lá thư nhỏ dành riêng cho em ngày 20/10." />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
   <title>Gửi em — 20/10 💌</title>
+  <meta name="description" content="Một lá thư nhỏ dành riêng cho em ngày 20/10." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Có một lá thư nhỏ dành cho em 💌" />
+  <meta property="og:description" content="Chạm vào phong bì và mở món quà nhỏ này nhé." />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Có một lá thư nhỏ dành cho em 💌" />
+  <meta name="twitter:description" content="Chạm vào phong bì và mở món quà nhỏ này nhé." />
+
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="ambient" aria-hidden="true"><span></span><span></span><span></span></div>
 
+  <div class="utility-dock" aria-label="Tiện ích">
+    <button class="utility-button" id="sharePage" type="button" aria-label="Chia sẻ lá thư" title="Chia sẻ lá thư">↗</button>
+    <button class="utility-button music-button" id="musicToggle" type="button" aria-label="Bật nhạc" title="Bật / tắt nhạc" hidden>
+      <span class="music-icon" aria-hidden="true">♫</span>
+      <span class="music-wave" aria-hidden="true"><i></i><i></i><i></i></span>
+    </button>
+  </div>
+
   <main>
     <section class="hero" id="top" aria-labelledby="hero-title">
-      <div class="hero__content">
+      <div class="hero__content page-shell">
         <p class="eyebrow">♡ &nbsp;20 · 10 · 2026&nbsp; ♡</p>
         <h1 id="hero-title">Một lá thư nhỏ<br><em>gửi người anh thương</em></h1>
         <p class="hero__subtitle">Không phải món quà lớn nhất, nhưng là những điều anh muốn giữ lại bằng chữ — dành riêng cho em.</p>
 
         <div class="envelope-scene" id="envelopeScene">
           <button class="envelope" id="openLetter" type="button" aria-label="Mở phong thư" aria-controls="letter" aria-expanded="false">
-            <span class="env-shadow"></span>
-            <span class="env-back"></span>
+            <span class="env-shadow" aria-hidden="true"></span>
+            <span class="env-back" aria-hidden="true"></span>
+
             <span class="folded-paper" aria-hidden="true">
               <span class="paper-panel paper-top"></span>
-              <span class="paper-panel paper-middle"><span class="paper-copy"><small>Gửi em,</small><strong>một điều anh muốn nói…</strong><i>20 · 10</i></span></span>
+              <span class="paper-panel paper-middle">
+                <span class="paper-copy"><small>Gửi em,</small><strong>một điều anh muốn nói…</strong><i>20 · 10</i></span>
+              </span>
               <span class="paper-panel paper-bottom"></span>
             </span>
-            <span class="env-flap"></span>
-            <span class="env-left"></span><span class="env-right"></span><span class="env-bottom"></span>
-            <span class="env-seal">♥</span>
+
+            <span class="env-flap" aria-hidden="true"></span>
+            <span class="env-left" aria-hidden="true"></span>
+            <span class="env-right" aria-hidden="true"></span>
+            <span class="env-bottom" aria-hidden="true"></span>
+            <span class="env-seal" aria-hidden="true">♥</span>
           </button>
         </div>
+
         <p class="hero__hint"><span></span> Chạm vào phong bì để mở</p>
       </div>
     </section>
 
     <section class="letter-section" id="letter" aria-labelledby="letter-title" aria-hidden="true">
-      <div class="letter-wrap">
+      <div class="letter-wrap page-shell">
         <article class="letter-card">
-          <button class="letter-close" id="closeLetter" type="button" aria-label="Giấu bức thư">×</button>
+          <div class="letter-toolbar">
+            <button class="letter-close" id="closeLetter" type="button" aria-label="Giấu bức thư" title="Giấu bức thư">×</button>
+          </div>
+
           <header class="letter-header">
             <p>Ngày Phụ nữ Việt Nam · 20 tháng 10</p>
             <h2 id="letter-title">Gửi em, cô gái đặc biệt của anh</h2>
-            <div class="ornament"><span></span><b>♡</b><span></span></div>
+            <div class="ornament" aria-hidden="true"><span></span><b>♡</b><span></span></div>
           </header>
 
           <div class="letter-copy">
@@ -59,16 +88,29 @@
           </div>
 
           <section class="memories" aria-labelledby="memories-title">
-            <div class="memories__heading"><p>our little memories</p><h3 id="memories-title">Những khoảnh khắc anh muốn giữ thật lâu</h3></div>
+            <div class="memories__heading">
+              <p>our little memories</p>
+              <h3 id="memories-title">Những khoảnh khắc anh muốn giữ thật lâu</h3>
+            </div>
+
             <div class="memory-grid">
-              <figure class="memory reveal"><img src="assets/photo-1.svg" alt="Kỷ niệm của hai chúng mình — ảnh 1" loading="lazy"><figcaption><span>01</span>Một ngày rất bình thường, nhưng vì có em nên thành đặc biệt.</figcaption></figure>
-              <figure class="memory reveal"><img src="assets/photo-2.svg" alt="Kỷ niệm của hai chúng mình — ảnh 2" loading="lazy"><figcaption><span>02</span>Có những khoảnh khắc anh chỉ muốn thời gian chậm lại một chút.</figcaption></figure>
-              <figure class="memory reveal"><img src="assets/photo-3.svg" alt="Kỷ niệm của hai chúng mình — ảnh 3" loading="lazy"><figcaption><span>03</span>Và còn thật nhiều bức ảnh mình chưa kịp chụp cùng nhau.</figcaption></figure>
+              <figure class="memory reveal">
+                <img src="assets/photo-1.svg" alt="Kỷ niệm của hai chúng mình — ảnh 1" loading="lazy" decoding="async">
+                <figcaption><span>01</span>Một ngày rất bình thường, nhưng vì có em nên thành đặc biệt.</figcaption>
+              </figure>
+              <figure class="memory reveal">
+                <img src="assets/photo-2.svg" alt="Kỷ niệm của hai chúng mình — ảnh 2" loading="lazy" decoding="async">
+                <figcaption><span>02</span>Có những khoảnh khắc anh chỉ muốn thời gian chậm lại một chút.</figcaption>
+              </figure>
+              <figure class="memory reveal">
+                <img src="assets/photo-3.svg" alt="Kỷ niệm của hai chúng mình — ảnh 3" loading="lazy" decoding="async">
+                <figcaption><span>03</span>Và còn thật nhiều bức ảnh mình chưa kịp chụp cùng nhau.</figcaption>
+              </figure>
             </div>
           </section>
 
           <footer class="letter-footer">
-            <div class="footer-heart">♡</div>
+            <div class="footer-heart" aria-hidden="true">♡</div>
             <p class="footer-title">Chúc em một ngày 20/10 thật dịu dàng.</p>
             <p class="footer-sub">Và mong rằng mỗi ngày sau hôm nay, em vẫn luôn biết mình được yêu thương nhiều đến thế nào.</p>
             <p class="signature">Thương em thật nhiều,<strong>— Anh của em ♡</strong></p>
@@ -79,6 +121,7 @@
     </section>
   </main>
 
+  <audio id="bgMusic" src="assets/music.mp3" preload="metadata" loop playsinline></audio>
   <div class="toast" id="toast" role="status" aria-live="polite">Một chút yêu thương đang bay đến em ♡</div>
   <div class="heart-layer" id="heartLayer" aria-hidden="true"></div>
   <script src="script.js" defer></script>
