@@ -64,7 +64,10 @@
     music.volume = 0.58;
     music.addEventListener('loadedmetadata', enableMusicButton, { once: true });
     music.addEventListener('canplay', enableMusicButton, { once: true });
-    music.addEventListener('play', () => setMusicUI(true));
+    music.addEventListener('play', () => {
+      enableMusicButton();
+      setMusicUI(true);
+    });
     music.addEventListener('pause', () => setMusicUI(false));
     music.addEventListener('error', () => {
       musicAvailable = false;
@@ -72,7 +75,6 @@
     });
 
     musicBtn.addEventListener('click', async () => {
-      if (!musicAvailable) return;
       try {
         if (music.paused) await music.play();
         else music.pause();
@@ -82,9 +84,15 @@
     });
   }
 
-  async function tryStartMusicFromGesture() {
-    if (!music || !musicAvailable || !music.paused) return;
-    try { await music.play(); } catch (_) { }
+  function tryStartMusicFromGesture() {
+    if (!music || !music.paused) return;
+    enableMusicButton();
+    const playPromise = music.play();
+    if (playPromise && typeof playPromise.catch === 'function') {
+      playPromise.catch(() => {
+        showToast('Chạm nút nhạc để phát ♫');
+      });
+    }
   }
 
   function showLargeLetter() {
@@ -102,6 +110,8 @@
     busy = true;
     openBtn.disabled = true;
     openBtn.setAttribute('aria-expanded', 'true');
+
+    // Phát nhạc ngay trong thao tác bấm mở thư để iOS/Safari cho phép autoplay.
     tryStartMusicFromGesture();
 
     scene.classList.add('is-opening');
