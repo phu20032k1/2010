@@ -1,38 +1,23 @@
 # 💌 Love Letter 20/10
 
-Website tĩnh gồm đúng 3 file chính để up GitHub Pages:
+Microsite tĩnh 20/10 tối ưu iPhone + desktop.
 
+## Cấu trúc
 - `index.html` — nội dung thư
-- `style.css` — giao diện + responsive iPhone/desktop
-- `script.js` — animation + tương tác
-
-Ảnh nằm trong `assets/`.
-
-## Sửa chữ
-Mở `index.html`, tìm `✏️` để thấy tất cả chỗ cần thay.
+- `style.css` — giao diện + responsive + animation gập/mở
+- `script.js` — mở/giấu thư + tim/hoa/ánh sáng
+- `assets/` — ảnh kỷ niệm
 
 ## Thay ảnh
-Ghi đè ảnh thật của hai người vào:
+Hiện repo có 3 placeholder SVG để Vercel không bị ảnh vỡ:
+- `assets/photo-1.svg`
+- `assets/photo-2.svg`
+- `assets/photo-3.svg`
 
-- `assets/photo-1.jpg`
-- `assets/photo-2.jpg`
-- `assets/photo-3.jpg`
+Khi có ảnh thật, upload ảnh vào `assets/` rồi đổi `src` trong `index.html`.
 
-Giữ nguyên tên file là không cần sửa code.
+## Sửa chữ
+Sửa trực tiếp các đoạn placeholder trong `index.html`. Nội dung có thể rất dài, layout tự giãn.
 
-## Up GitHub Pages
-1. Tạo repository mới.
-2. Upload toàn bộ file/thư mục này vào root repository.
-3. GitHub → **Settings → Pages**.
-4. Source: **Deploy from a branch**.
-5. Branch: **main**, folder: **/(root)**.
-6. Save và chờ GitHub tạo link.
-
-## Kiểm thử
-Đã thiết kế cho:
-- iPhone nhỏ (>= 320px)
-- iPhone hiện đại có notch / Dynamic Island
-- landscape mobile
-- tablet
-- desktop rộng
-- `prefers-reduced-motion`
+## Luồng animation
+Phong bì kín → mở nắp → giấy gập trượt lên → bung nếp → bức thư đầy đủ. Nút `×` giấu thư; hiệu ứng tim vẫn hoạt động.
