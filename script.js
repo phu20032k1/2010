@@ -1,136 +1,90 @@
-/* ====================================================================
-   20/10 LOVE LETTER — SCRIPT.JS
-   Chỉ điều khiển animation / tương tác. Nội dung thư nằm ở index.html.
-   ==================================================================== */
-
 (() => {
-  "use strict";
+  const scene = document.getElementById('envelopeScene');
+  const openBtn = document.getElementById('openLetter');
+  const letter = document.getElementById('letter');
+  const closeBtn = document.getElementById('closeLetter');
+  const heartRain = document.getElementById('heartRain');
+  const layer = document.getElementById('heartLayer');
+  const toast = document.getElementById('toast');
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let busy = false;
 
-  const scene = document.getElementById("envelopeScene");
-  const openButton = document.getElementById("openLetter");
-  const letter = document.getElementById("letter");
-  const readAgainButton = document.getElementById("readAgain");
-  const heartRainButton = document.getElementById("heartRain");
-  const heartLayer = document.getElementById("heartLayer");
-  const toast = document.getElementById("toast");
-  const revealItems = document.querySelectorAll(".reveal-on-scroll");
+  const wait = ms => new Promise(r => setTimeout(r, reduceMotion ? 20 : ms));
 
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let isOpening = false;
-  let toastTimer = null;
-
-  function smoothScrollTo(element) {
-    element.scrollIntoView({
-      behavior: reduceMotion ? "auto" : "smooth",
-      block: "start"
-    });
-  }
-
-  function makeHeartBurst(count = 18) {
-    if (!heartLayer) return;
-
-    const symbols = ["♡", "♥", "✦", "❀"];
-    const palette = ["#b75e75", "#d6889b", "#9e4c63", "#c9a06d"];
-
-    for (let index = 0; index < count; index += 1) {
-      const heart = document.createElement("span");
-      heart.className = "floating-heart";
-      heart.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-
-      heart.style.setProperty("--x", `${3 + Math.random() * 94}%`);
-      heart.style.setProperty("--size", `${13 + Math.random() * 18}px`);
-      heart.style.setProperty("--duration", `${4.4 + Math.random() * 2.8}s`);
-      heart.style.setProperty("--delay", `${Math.random() * 0.75}s`);
-      heart.style.setProperty("--drift", `${-30 + Math.random() * 60}px`);
-      heart.style.setProperty("--heart-color", palette[Math.floor(Math.random() * palette.length)]);
-
-      heartLayer.appendChild(heart);
-      window.setTimeout(() => heart.remove(), 8500);
+  function burst(x = innerWidth / 2, y = innerHeight * .55, count = 24) {
+    const symbols = ['♥','♡','✦','❀'];
+    for (let i = 0; i < count; i++) {
+      const el = document.createElement('span');
+      el.className = 'floating-heart';
+      el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      const dx = (Math.random() - .5) * Math.min(innerWidth * .75, 520);
+      const dy = -(120 + Math.random() * 320);
+      const rot = (Math.random() - .5) * 100;
+      el.style.left = `${x + (Math.random() - .5) * 34}px`;
+      el.style.top = `${y + (Math.random() - .5) * 20}px`;
+      el.style.setProperty('--dx', `${dx}px`);
+      el.style.setProperty('--dy', `${dy}px`);
+      el.style.setProperty('--rot', `${rot}deg`);
+      el.style.setProperty('--dur', `${1.8 + Math.random() * 1.5}s`);
+      el.style.setProperty('--delay', `${Math.random() * .18}s`);
+      layer.appendChild(el);
+      el.addEventListener('animationend', () => el.remove(), { once: true });
     }
   }
 
-  function showToast() {
-    if (!toast) return;
+  async function openLetter() {
+    if (busy || letter.classList.contains('is-visible')) return;
+    busy = true;
+    openBtn.disabled = true;
+    openBtn.setAttribute('aria-expanded', 'true');
+    document.body.classList.add('is-open');
 
-    toast.classList.add("is-visible");
-    window.clearTimeout(toastTimer);
-    toastTimer = window.setTimeout(() => {
-      toast.classList.remove("is-visible");
-    }, 2200);
+    scene.classList.add('is-opening');
+    burst(innerWidth / 2, Math.min(innerHeight * .7, 620), 12);
+    await wait(720);
+
+    scene.classList.add('is-letter-rising');
+    await wait(760);
+
+    scene.classList.add('is-letter-unfolding');
+    await wait(760);
+
+    letter.classList.add('is-visible');
+    letter.setAttribute('aria-hidden', 'false');
+    await wait(180);
+    letter.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    burst(innerWidth / 2, innerHeight * .72, 24);
+    busy = false;
   }
 
-  function revealLetter(event) {
-    event?.preventDefault();
-    if (isOpening) return;
-
-    isOpening = true;
-    scene?.classList.add("is-opening");
-    openButton?.setAttribute("aria-expanded", "true");
-    document.body.classList.add("is-open");
-    makeHeartBurst(reduceMotion ? 5 : 12);
-
-    const openDelay = reduceMotion ? 20 : 1450;
-
-    window.setTimeout(() => {
-      letter?.classList.add("is-visible");
-
-      // Cập nhật hash nhưng không làm trang giật ngay lập tức.
-      if (history.replaceState) {
-        history.replaceState(null, "", "#letter");
-      }
-
-      if (letter) smoothScrollTo(letter);
-      isOpening = false;
-    }, openDelay);
+  async function closeLetter() {
+    if (busy || !letter.classList.contains('is-visible')) return;
+    busy = true;
+    letter.classList.add('is-hiding');
+    await wait(400);
+    letter.classList.remove('is-visible', 'is-hiding');
+    letter.setAttribute('aria-hidden', 'true');
+    scene.classList.remove('is-opening', 'is-letter-rising', 'is-letter-unfolding');
+    openBtn.disabled = false;
+    openBtn.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('is-open');
+    document.getElementById('top').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    busy = false;
   }
 
-  function resetLetter(event) {
-    event?.preventDefault();
-    scene?.classList.remove("is-opening");
-    openButton?.setAttribute("aria-expanded", "false");
-    letter?.classList.remove("is-visible");
-    document.body.classList.remove("is-open");
+  openBtn.addEventListener('click', openLetter);
+  closeBtn.addEventListener('click', closeLetter);
 
-    if (history.replaceState) {
-      history.replaceState(null, "", "#top");
-    }
-
-    const top = document.getElementById("top");
-    if (top) smoothScrollTo(top);
-  }
-
-  openButton?.addEventListener("click", revealLetter);
-  readAgainButton?.addEventListener("click", resetLetter);
-
-  heartRainButton?.addEventListener("click", () => {
-    makeHeartBurst(reduceMotion ? 8 : 34);
-    showToast();
+  heartRain.addEventListener('click', e => {
+    const r = e.currentTarget.getBoundingClientRect();
+    burst(r.left + r.width / 2, r.top + r.height / 2, 42);
+    toast.classList.add('show');
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(() => toast.classList.remove('show'), 2200);
   });
 
-  // Ảnh hiện nhẹ khi cuộn đến. Nếu trình duyệt cũ không có IntersectionObserver,
-  // chúng sẽ hiện luôn thay vì bị ẩn.
-  if ("IntersectionObserver" in window && !reduceMotion) {
-    const observer = new IntersectionObserver((entries, currentObserver) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add("is-inview");
-        currentObserver.unobserve(entry.target);
-      });
-    }, {
-      threshold: 0.15,
-      rootMargin: "0px 0px -6% 0px"
-    });
-
-    revealItems.forEach((item) => observer.observe(item));
-  } else {
-    revealItems.forEach((item) => item.classList.add("is-inview"));
-  }
-
-  // Nếu ai đó mở link thẳng dạng .../#letter thì vẫn hiện thư.
-  if (window.location.hash === "#letter") {
-    scene?.classList.add("is-opening");
-    openButton?.setAttribute("aria-expanded", "true");
-    letter?.classList.add("is-visible");
-    document.body.classList.add("is-open");
-  }
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('seen'); });
+  }, { threshold: .16 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 })();
